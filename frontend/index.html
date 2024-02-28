@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>File Size Checker</title>
+  <script src="https://cdn.jsdelivr.net/npm/web-streams-polyfill@2.0.2/dist/ponyfill.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/streamsaver@2.0.3/StreamSaver.min.js"></script>
+</head>
+<body>
+  <h1>File Size Checker</h1>
+  <form id="uploadForm">
+    <input type="file" id="fileInput" accept=".txt">
+    <button type="submit">Upload</button>
+  </form>
+  <div id="result"></div>
+  <div id="result2"></div>
+
+  <script>
+
+    const GetFiles = async function FetchFiles() { 
+        
+        try{
+            var response = await fetch('http://localhost:4000/files', {
+            method: 'GET'
+            });
+
+            if (!response.ok) {
+            throw new Error('Error Getting files');
+            }
+
+            files = await response.json();
+            console.log(files);
+            const newList = document.createElement("ul");
+            for(var i = 0;i < files.length; i++){
+
+                const newItem = document.createElement("li");
+
+                const fileNameSpan = document.createElement("span");
+                fileNameSpan.textContent = files[i].filename;
+                const filenameAtTelegramSpan = document.createElement("span");
+                filenameAtTelegramSpan.textContent = files[i].filenameAtTelegram;
+                const fileTypeSpan = document.createElement("span");
+                fileTypeSpan.textContent = files[i].fileType;
+                const downloadBtn = document.createElement('button');
+                downloadBtn.textContent = "download";
+                downloadBtn.classList.add("download");
+                downloadBtn.id = files[i].filenameAtTelegram;
+
+
+                newItem.appendChild(fileNameSpan);
+                newItem.appendChild(filenameAtTelegramSpan);
+                newItem.appendChild(fileTypeSpan);
+                newList.appendChild(newItem);
+                newList.appendChild(downloadBtn);
+            }
+            document.getElementById('result2').appendChild(newList);
+
+            //document.getElementById('result2').textContent = `Files: ${response.toString()}`;
+        } catch (error) {
+            console.error(error);
+            document.getElementById('result2').textContent = 'Error getting files';
+        }
+    }
+    
+    async function PrepareList(){
+        await GetFiles();
+        const downloadBtns = document.querySelectorAll(".download");
+        console.log(downloadBtns);
+        downloadBtns.forEach(downloadBtn => {
+          downloadBtn.addEventListener('click', async function handleClick(event){
+              try {
+
+                  //console.log(event);
+                  console.log(downloadBtn.id);
+                  console.log(event.target.id);
+                  console.log("WorkingQQQQ");
+                  const response = await fetch(`http://localhost:4000/files/getfile?fileid=${downloadBtn.id}`, {
+                  method: 'GET',
+                  });
+
+                  if (!response.ok) {
+                      throw new Error('Error uploading file');
+                  }
+                  console.log("Received file!");
+                  console.log(response);
+                  const filename = response.headers.get('filename');
+                  const streamSaver = window.streamSaver
+                  const fileStream = streamSaver.createWriteStream(filename);
+                  const writer = fileStream.getWriter();
+
+                  const reader = response.body.getReader();
+                  
+                  console.log("received filename:" + filename);
+                  const pump = () => reader.read()
+                    .then(({ value, done }) => {
+                      if (done) writer.close();
+                      else {
+                        writer.write(value);
+                        return writer.ready.then(pump);
+                      }
+                    });
+
+                  await pump()
+                    .then(() => console.log('Closed the stream, Done writing'))
+                    .catch(err => console.log(err));
+                  //console.log(response);
+                  
+              } catch (error) {
+                  console.error(error);
+                  document.getElementById('result').textContent = 'Error uploading file';
+              }
+          })
+        });
+    }
+
+    PrepareList();
+    
+    document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+
+      if (!file) {
+        alert('Please select a file.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const response = await fetch('http://localhost:4000/files', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) {
+          throw new Error('Error uploading file');
+        }
+
+        const fileSize = await response.text();
+        document.getElementById('result').textContent = `File size: ${fileSize}`;
+      } catch (error) {
+        console.error(error);
+        document.getElementById('result').textContent = 'Error uploading file';
+      }
+      
+    });
+  </script>
+</body>
+</html>

@@ -1,26 +1,44 @@
-const {TELEGRAM_TOKEN, TELEGRAM_BOT_ID} = require("../../config/keys");
-const TelegramBot = require('node-telegram-bot-api');
-const path = require("node:path");
+const { TelegramClient } = require("telegram");
+const { StringSession } = require("telegram/sessions");
+const {TELEGRAM_API_ID, TELEGRAM_API_HASH, TELEGRAM_BOT_ID,TELEGRAM_PHONE_NUMBER, TELEGRAM_SESSION} = require("../../config/keys");
+const input = require("input"); // npm i input
+
 module.exports = class Telegram { 
-    constructor (pPoling){
-        this.botHandler = this.InitBot (pPoling);
+    constructor (){
+        this.clientHandler = this.InitClient ();
     }
 
-    async InitBot (pPoling){
-        return await new TelegramBot (TELEGRAM_TOKEN, {polling: pPoling});
+    async InitClient (){
+
+        const stringSession = new StringSession(TELEGRAM_SESSION);
+        const client = await new TelegramClient(stringSession, TELEGRAM_API_ID, TELEGRAM_API_HASH, {
+            connectionRetries: 5,
+        });
+        await client.start({
+            phoneNumber: TELEGRAM_PHONE_NUMBER,
+            password: async () => await input.text("Please enter your password: "),
+            phoneCode: async () =>
+            await input.text("Please enter the code you received: "),
+            onError: (err) => console.log(err),
+        });
+        console.log(client.session.save());
+        return client;
     }
 
     async SendDocument (pDocument){
-        const fileOptions = {
-            filename: pDocument.filename
-        }
-        //return  (await this.botHandler).sendMessage(TELEGRAM_BOT_ID,"Hello");
-        return await (await this.botHandler).sendDocument(TELEGRAM_BOT_ID, pDocument.buffer,{}, fileOptions);
+        return await (await this.clientHandler).sendFile(TELEGRAM_BOT_ID,{file:pDocument});;
     }
 
-    async GetDocument (pDocument){
+    progressFunc(total_size,download){
+        console.log("total :" +total_size);
+        console.log("downloaded: " + download);
+    }
+    async GetDocument (pMsg){
 
-        const newpath = path.join(__dirname,"../../uploads/");
-        return await (await this.botHandler).downloadFile(pDocument,newpath);
+        return await (await this.clientHandler).downloadMedia(pMsg,{progressCallback:this.progressFunc}) //this will return a buffer
+        
+    }
+    async GetMessages(pMsgId){
+        return await (await this.clientHandler).getMessages(TELEGRAM_BOT_ID,{ids:Number(pMsgId)});
     }
 }

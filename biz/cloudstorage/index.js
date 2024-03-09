@@ -10,14 +10,13 @@ class CloudStorage {
     return await this.TelegramBot.SendDocument (pFile);
   }
   async GetFileFromStorage (pFile) {
-    console.log("fileid at getfilefromstorage: "+ pFile)
     return await this.TelegramBot.GetDocument (pFile);
   }
-  async GetFileFromStorag (pFile){
-    console.log("File at test location: "+pFile);
-    return pFile;
+  async GetMessages (pMsgId){
+    return await this.TelegramBot.GetMessages(pMsgId);
   }
 }
 
 const cloudStorage = new CloudStorage;
 module.exports = cloudStorage;
+

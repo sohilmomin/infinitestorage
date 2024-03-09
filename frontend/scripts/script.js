@@ -1,6 +1,7 @@
 //////////////// Drop Upload Handling ////////////////////
 const dropArea = document.getElementById("drop-zone");
 const inputFile = document.getElementById('input-file');
+const SERVER_URL = "https://infinitestorage.onrender.com/";
 
 dropArea.addEventListener("dragover",function(e) {
     e.preventDefault();
@@ -92,7 +93,7 @@ function CreateListLineItem (file){
 const GetFiles = async function FetchFiles() { 
 
     try{
-        var response = await fetch('http://localhost:4000/files', {
+        var response = await fetch(SERVER_URL+'files', {
             method: 'GET'
         });
 
@@ -124,7 +125,7 @@ async function PrepareList(){
       downloadBtn.addEventListener('click', async function handleClick(event){
           try {
 
-              const response = await fetch(`http://localhost:4000/files/getfile?fileid=${downloadBtn.id}`, {
+              const response = await fetch(SERVER_URL + `files/getfile?fileid=${downloadBtn.id}`, {
               method: 'GET',
               });
 
@@ -186,7 +187,7 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
   formData.append('accesskey',accessKey.value);
   document.querySelector('.upload-response').textContent = "Uploading...";
   try {
-    var response = await fetch('http://localhost:4000/files', {
+    var response = await fetch(SERVER_URL + 'files', {
       method: 'POST',
       body: formData
     });

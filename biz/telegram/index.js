@@ -11,11 +11,11 @@ module.exports = class Telegram {
     async InitClient (){
 
         const stringSession = new StringSession(TELEGRAM_SESSION);
-        const client = await new TelegramClient(stringSession, TELEGRAM_API_ID, TELEGRAM_API_HASH, {
+        const client = await new TelegramClient(stringSession, Number(TELEGRAM_API_ID), TELEGRAM_API_HASH, {
             connectionRetries: 5,
         });
         await client.start({
-            phoneNumber: TELEGRAM_PHONE_NUMBER,
+            phoneNumber: Number(TELEGRAM_PHONE_NUMBER),
             password: async () => await input.text("Please enter your password: "),
             phoneCode: async () =>
             await input.text("Please enter the code you received: "),
@@ -26,7 +26,7 @@ module.exports = class Telegram {
     }
 
     async SendDocument (pDocument){
-        return await (await this.clientHandler).sendFile(TELEGRAM_BOT_ID,{file:pDocument});;
+        return await (await this.clientHandler).sendFile(Number(TELEGRAM_BOT_ID),{file:pDocument});;
     }
 
     progressFunc(total_size,download){
@@ -39,6 +39,6 @@ module.exports = class Telegram {
         
     }
     async GetMessages(pMsgId){
-        return await (await this.clientHandler).getMessages(TELEGRAM_BOT_ID,{ids:Number(pMsgId)});
+        return await (await this.clientHandler).getMessages(Number(TELEGRAM_BOT_ID),{ids:Number(pMsgId)});
     }
 }

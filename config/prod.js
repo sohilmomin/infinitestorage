@@ -1,0 +1,12 @@
+module.exports = {
+    MONGOURI: process.env.MONGOURI,
+    TELEGRAM_TOKEN: process.env.TELEGRAM_TOKEN,
+    TELEGRAM_BOT_ID: process.env.TELEGRAM_BOT_ID,
+    TELEGRAM_API_ID: process.env.TELEGRAM_API_ID,
+    TELEGRAM_API_HASH: process.env.TELEGRAM_API_HASH,
+    TELEGRAM_PHONE_NUMBER: process.env.TELEGRAM_PHONE_NUMBER,
+    ACCESS_SECRET: process.env.ACCESS_SECRET,
+    ENCRYPT_ALGO: process.env.ENCRYPT_ALGO,
+    ENCRYPT_KEY: process.env.ENCRYPT_KEY,
+    TELEGRAM_SESSION: process.env.TELEGRAM_SESSION,
+}

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>File Size Checker</title>
+  <script src="https://cdn.jsdelivr.net/npm/web-streams-polyfill@2.0.2/dist/ponyfill.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/streamsaver@2.0.3/StreamSaver.min.js"></script>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+<link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+<link rel="stylesheet" href="index.css"> 
+</head>
+<body class="full-body">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 hero-heading">
+          <span class="infinite-text">Infinite</span> <i class="fa fa-infinity infinity-symbol" ></i> <span class="storage-text">Storage</span>
+      </div>
+      
+    </div>
+    <div class="row">
+      <div class="col-md-12 hero-subheading">
+        Enjoy unlimited cloud storage absolutly free 
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <a href="#disclaimer" class="disclaimer-title"><i class="lni lni-warning"></i> Important! Read The Disclaimer first before using our service! <i class="lni lni-warning"></i></a>
+      </div>
+    </div>
+    <div class="row upload-box">
+      <div class="col-md-0 col-3">
+
+      </div>
+      <div class="col-md-12 col-6">
+        
+        <form id="uploadForm">
+          <div class="row">
+            <label for="input-file"  id="drop-zone">
+              <input id="input-file" type="file" style="visibility: hidden; position: absolute;">
+              <div class="drop-mid-zone">
+                <i class="lni lni-cloud-upload upload-icon"></i>
+              
+                <p class="upload-text">Drag and Drop or click here <br> to upload your file</p>
+                <span class="upload-bottom-text">Upload any type of file from your desktop</span>
+              </div>
+            </label>
+          </div>
+          <div class="row">
+            <input type="text" class="access-input" id="InputAccessKey" aria-describedby="AccessKeyHelp" placeholder="Enter Access Key">
+            <small id="AccessKeyHelp" class="form-text text-muted">To test the feature, Contact <a href="https://sohil.tech">Owner</a> to get the access key.</small>
+          </div>
+          <div class="row">
+            <button class="btn upload-button" type="submit"> Upload </button>
+          </div>
+          <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6 text-center">
+              <p class="upload-response"></p>
+            </div>
+            <div class="col-md-3"></div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-0 col-2">
+      </div>  
+    </div>
+
+    <div class="row files-list-box">
+      <div class="col-12" id="file-list">
+        <div class="row file-list-heading">
+          <div class="col-md-4 list-field">
+            File name
+          </div>
+          <div class="col-md-1 list-field">
+            File Id 
+          </div>
+          <div class="col-md-1 list-field">
+           File type
+          </div>
+          <div class="col-md-1 list-field">
+            File size
+          </div>
+          <div class="col-md-3 list-field">
+            Time Stamp
+          </div>
+          <div class="col-md-2 list-field">
+            Action
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="disclaimer">
+    <h2>
+      <i class="lni lni-warning disclaimer-icon"></i>
+      <i class="lni lni-warning disclaimer-icon"></i>
+      <i class="lni lni-warning disclaimer-icon"></i> 
+      <span>Disclaimer</span> 
+      <i class="lni lni-warning disclaimer-icon"></i>
+      <i class="lni lni-warning disclaimer-icon"></i>
+      <i class="lni lni-warning disclaimer-icon"></i>
+    </h2>
+    <p>This project is developed only for fun and learning. 
+      We don't have any intention to misuse the Telegram as a cloud storage. 
+      To test this feature, contact <a href="https://sohil.tech" target="#">Me</a> to get the access key.    
+      <br> Dear Telegram, If you are reading this, please don't ban us.</p>
+  </div>
+  <footer class="footer-box text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-5 col-0 name-tag">
+          Made By <i class="lni lni-heart-fill icon-heart"></i> Sohil
+        </div>
+        <div class="col-md-2 col-12">
+          <div class="row">
+            <div class="col-md-4">
+              <a href="https://sohil.tech"><i class="lni lni-briefcase-alt social-icon"></i></a>
+            </div>
+            <div class="col-md-4">
+                <a href="https://github.com/sohilmomin"><i class="lni lni-github-original social-icon"></i></a>
+            </div>
+            <div class="col-md-4">
+                <a href="https://linkedin.com/in/mohamadsohil-momin"><i class="lni lni-linkedin-original social-icon"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-5 col-0"></div>
+      </div>
+    </div>
+    <!-- Copyright -->
+  </footer>
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/304b43aeff.js" crossorigin="anonymous"></script>
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+  <script src="./scripts/script.js"></script>
+</body>
+</html>
